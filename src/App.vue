@@ -13,6 +13,7 @@ export default {
   mounted() {
     this.$vuetify.theme.dark = true
     this.$store.dispatch('getExpenses')
+    this.$store.dispatch('getIncomes')
   },
   data: () => ({
     //

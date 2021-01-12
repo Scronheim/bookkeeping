@@ -55,19 +55,42 @@ export default new Vuex.Store({
           {id: 51, title: 'Поездки за город', active: false},
           {id: 52, title: 'Путешествия', active: false}],
         title: 'Дорога',
+      },
+      {
+        id: 6,
+        icon: 'mdi-cash',
+        items: [
+          {id: 60, title: 'Друзьям', active: false},
+          {id: 61, title: 'Коллегам', active: false},
+          {id: 62, title: 'Родителям', active: false}],
+        title: 'Займ',
       }
     ],
-    expenses: []
+    incomeSources: [
+      {id: 1, title: 'Зарплата'},
+      {id: 2, title: 'Премия'},
+      {id: 3, title: 'Долг'},
+    ],
+    expenses: [],
+    incomes: []
   },
   mutations: {
     setExpenses(state, payload) {
       state.expenses = payload
     },
+    setIncomes(state, payload) {
+      state.incomes = payload
+    },
   },
   actions: {
     getExpenses(context) {
-      axios.get(`${API_URL}/expenses`).then((response) => {
+      axios.get(`${API_URL}/monthExpenses`).then((response) => {
         context.commit('setExpenses', response.data.results)
+      })
+    },
+    getIncomes(context) {
+      axios.get(`${API_URL}/monthIncomes`).then((response) => {
+        context.commit('setIncomes', response.data.results)
       })
     },
     async clearActiveCategories(context) {
@@ -79,12 +102,17 @@ export default new Vuex.Store({
     },
     async addExpense(context, payload) {
       return axios.post(`${API_URL}/expenses`, payload)
+    },
+    async addIncome(context, payload) {
+      return axios.post(`${API_URL}/incomes`, payload)
     }
   },
   modules: {
   },
   getters: {
     categories: state => state.categories,
-    expenses: state => state.expenses
+    expenses: state => state.expenses,
+    incomes: state => state.incomes,
+    incomeSources: state => state.incomeSources
   }
 })
