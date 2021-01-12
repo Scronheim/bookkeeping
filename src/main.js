@@ -3,10 +3,12 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import store from './store'
 import router from './router'
+import _ from 'lodash'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css';
 
 Vue.config.productionTip = false
+Vue.prototype.$_ = _
 
 Vue.use(Toast, {
   transition: "Vue-Toastification__bounce",

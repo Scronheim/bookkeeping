@@ -8,6 +8,25 @@
         <v-btn color="success" @click="addDialog = true">Добавить приход</v-btn>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-card-title>Последние расходы</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <ul>
+                  <li v-for="(item, index) in $store.getters.expenses" :key="index">
+                    {{ humanCategory(item.category) }} - {{ item.sum }}р. {{ item.date }}
+                  </li>
+                </ul>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+
     <v-dialog v-model="addDialog" width="60%" persistent>
       <v-card>
         <v-card-title>Добавить расходы</v-card-title>
@@ -72,20 +91,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-row>
-      <v-col>
-        <v-card>
-          <v-card-title>Последние расходы</v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col>
-                <p v-for="(item, index) in $store.getters.expenses" :key="index">{{ item }}</p>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -127,6 +132,17 @@ export default {
           this.$toast.error('Что то пошло не так')
         }
       })
+    },
+    humanCategory(id) {
+      let category
+      this.$store.getters.categories.forEach((item) => {
+        item.items.forEach((child) => {
+          if (child.id === id) {
+            category = child.title
+          }
+        })
+      })
+      return category
     }
   }
 }
