@@ -56,18 +56,18 @@ export default new Vuex.Store({
           {id: 52, title: 'Путешествия', active: false}],
         title: 'Дорога',
       }
-    ]
+    ],
+    expenses: []
   },
   mutations: {
-    setCategories(state, payload) {
-      state.categories = payload
+    setExpenses(state, payload) {
+      state.expenses = payload
     },
-
   },
   actions: {
-    getCategories(context) {
-      axios.get(`${API_URL}/categories`).then((response) => {
-        context.commit('setCategories', response.data.result)
+    getExpenses(context) {
+      axios.get(`${API_URL}/expenses`).then((response) => {
+        context.commit('setExpenses', response.data.results)
       })
     },
     async clearActiveCategories(context) {
@@ -84,6 +84,7 @@ export default new Vuex.Store({
   modules: {
   },
   getters: {
-    categories: state => state.categories
+    categories: state => state.categories,
+    expenses: state => state.expenses
   }
 })

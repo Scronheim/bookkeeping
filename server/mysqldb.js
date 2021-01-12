@@ -1,5 +1,4 @@
 "use strict"
-const CATEGORIES_TABLE = 'categories'
 const EXPENSES_TABLE = 'expenses'
 
 class DB {
@@ -24,11 +23,11 @@ class DB {
     });
   }
 
-  selectCategories() {
-    return this.db.select().from(CATEGORIES_TABLE).orderBy('title')
+  selectExpanses() {
+    return this.db.select().from(EXPENSES_TABLE).orderBy('id')
   }
 
-  insertExpanse(payload) {
+  insertExpense(payload) {
     return this.db(EXPENSES_TABLE).insert(payload)
   }
 }

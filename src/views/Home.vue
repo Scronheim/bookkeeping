@@ -8,7 +8,7 @@
         <v-btn color="success" @click="addDialog = true">Добавить приход</v-btn>
       </v-col>
     </v-row>
-    <v-dialog v-model="addDialog" width="60%">
+    <v-dialog v-model="addDialog" width="60%" persistent>
       <v-card>
         <v-card-title>Добавить расходы</v-card-title>
         <v-card-text>
@@ -72,6 +72,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-card-title>Последние расходы</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <p v-for="(item, index) in $store.getters.expenses" :key="index">{{ item }}</p>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -109,6 +123,8 @@ export default {
         if (response.data.success) {
           this.clearFields()
           this.$toast.success('Успешно сохранено')
+        } else {
+          this.$toast.error('Что то пошло не так')
         }
       })
     }

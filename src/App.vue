@@ -12,6 +12,7 @@ export default {
   name: 'App',
   mounted() {
     this.$vuetify.theme.dark = true
+    this.$store.dispatch('getExpenses')
   },
   data: () => ({
     //

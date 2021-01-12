@@ -13,10 +13,12 @@ router.use(bodyParser.json());
 
 router.route('/api/expenses')
   .get((req, res) => {
-
+    mysqlDB.selectExpanses().then((response) => {
+      res.json({results: response})
+    })
   })
   .post((req, res) => {
-    mysqlDB.insertExpanse(req.body).then((response) => {
+    mysqlDB.insertExpense(req.body).then((response) => {
       if (response.length > 0) {
         res.json({success: true})
       } else {
@@ -24,8 +26,6 @@ router.route('/api/expenses')
       }
     })
   })
-
-
 
 app.use(router)
 
