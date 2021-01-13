@@ -58,10 +58,10 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
+      <v-col cols="6">
         <v-menu
             ref="monthMenu"
-            v-model="monthMenu"
+            v-model="monthExpenseMenu"
             close-on-content-click="true"
             transition="scale-transition"
             offset-y
@@ -70,7 +70,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-                v-model="month"
+                v-model="monthExpense"
                 label="Выбери месяц"
                 prepend-icon="mdi-calendar"
                 readonly
@@ -80,12 +80,17 @@
           </template>
           <v-date-picker
               locale="ru"
-              v-model="month"
+              v-model="monthExpense"
               type="month"
               no-title
               scrollable
           />
         </v-menu>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+
       </v-col>
     </v-row>
 
@@ -231,8 +236,8 @@ export default {
   data: () => ({
     addExpenseDialog: false,
     addIncomeDialog: false,
-    month: new Date().toISOString().substr(0, 7),
-    monthMenu: false,
+    monthExpense: new Date().toISOString().substr(0, 7),
+    monthExpenseMenu: false,
     dateMenu: false,
     dateIncomeMenu: false,
     expense: {
