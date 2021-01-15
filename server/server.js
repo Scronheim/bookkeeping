@@ -38,6 +38,20 @@ router.route('/api/expenses')
       }
     })
   })
+  .patch((req, res) => {
+    mysqlDB.updateExpense(req.body).then((response) => {
+      if (response === 1) {
+        res.json({success: true})
+      } else {
+        res.json({success: false})
+      }
+    })
+  })
+  .delete((req, res) => {
+    mysqlDB.deleteExpense(req.query.id).then((response) => {
+      res.json({results: response})
+    })
+  })
 
 router.route('/api/incomes')
   .get((req, res) => {
@@ -52,6 +66,20 @@ router.route('/api/incomes')
       } else {
         res.json({success: false})
       }
+    })
+  })
+  .patch((req, res) => {
+    mysqlDB.updateIncome(req.body).then((response) => {
+      if (response === 1) {
+        res.json({success: true})
+      } else {
+        res.json({success: false})
+      }
+    })
+  })
+  .delete((req, res) => {
+    mysqlDB.deleteIncome(req.query.id).then((response) => {
+      res.json({results: response})
     })
   })
 

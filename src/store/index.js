@@ -86,12 +86,12 @@ export default new Vuex.Store({
   },
   actions: {
     getExpenses(context, payload) {
-      axios.get(`${API_URL}/monthExpenses?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
+      return axios.get(`${API_URL}/monthExpenses?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
         context.commit('setExpenses', response.data.results)
       })
     },
     getIncomes(context, payload) {
-      axios.get(`${API_URL}/monthIncomes?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
+      return axios.get(`${API_URL}/monthIncomes?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
         context.commit('setIncomes', response.data.results)
       })
     },
@@ -107,6 +107,18 @@ export default new Vuex.Store({
     },
     async addIncome(context, payload) {
       return axios.post(`${API_URL}/incomes`, payload)
+    },
+    saveExpense(context, payload) {
+      return axios.patch(`${API_URL}/expenses`, payload)
+    },
+    saveIncome(context, payload) {
+      return axios.patch(`${API_URL}/incomes`, payload)
+    },
+    deleteExpense(context, id) {
+      return axios.delete(`${API_URL}/expenses?id=${id}`)
+    },
+    deleteIncome(context, id) {
+      return axios.delete(`${API_URL}/incomes?id=${id}`)
     }
   },
   modules: {

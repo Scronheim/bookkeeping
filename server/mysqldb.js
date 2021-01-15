@@ -37,6 +37,14 @@ class DB {
     return this.db(EXPENSES_TABLE).insert(payload)
   }
 
+  updateExpense(payload) {
+    return this.db(EXPENSES_TABLE).where('id', '=', payload.id).update(payload)
+  }
+
+  deleteExpense(id) {
+    return this.db(EXPENSES_TABLE).where('id', id).del()
+  }
+
   selectIncomes() {
     return this.db.select().from(INCOMES_TABLE).orderBy('id')
   }
@@ -47,6 +55,14 @@ class DB {
 
   insertIncome(payload) {
     return this.db(INCOMES_TABLE).insert(payload)
+  }
+
+  updateIncome(payload) {
+    return this.db(INCOMES_TABLE).where('id', '=', payload.id).update(payload)
+  }
+
+  deleteIncome(id) {
+    return this.db(INCOMES_TABLE).where('id', id).del()
   }
 }
 module.exports = DB
