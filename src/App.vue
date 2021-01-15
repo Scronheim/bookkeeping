@@ -12,8 +12,12 @@ export default {
   name: 'App',
   mounted() {
     this.$vuetify.theme.dark = true
-    this.$store.dispatch('getExpenses')
-    this.$store.dispatch('getIncomes')
+    let dates = {
+      startDate: this.$moment().startOf('month').format('YYYY-MM-DD'),
+      endDate: this.$moment().endOf('month').format('YYYY-MM-DD')
+    }
+    this.$store.dispatch('getExpenses', dates)
+    this.$store.dispatch('getIncomes', dates)
   },
   data: () => ({
     //

@@ -29,8 +29,8 @@ class DB {
     return this.db.select().from(EXPENSES_TABLE).orderBy('id')
   }
 
-  selectMonthExpenses() {
-    return this.db.select().from(EXPENSES_TABLE).whereBetween('date', [moment().startOf('month').format('YYYY-MM-DD'), moment().endOf('month').format('YYYY-MM-DD')]).orderBy('date')
+  selectMonthExpenses(startDate, endDate) {
+    return this.db.select().from(EXPENSES_TABLE).whereBetween('date', [startDate, endDate]).orderBy('date')
   }
 
   insertExpense(payload) {
@@ -41,8 +41,8 @@ class DB {
     return this.db.select().from(INCOMES_TABLE).orderBy('id')
   }
 
-  selectMonthIncomes() {
-    return this.db.select().from(INCOMES_TABLE).whereBetween('date', [moment().startOf('month').format('YYYY-MM-DD'), moment().endOf('month').format('YYYY-MM-DD')]).orderBy('date')
+  selectMonthIncomes(startDate, endDate) {
+    return this.db.select().from(INCOMES_TABLE).whereBetween('date', [startDate, endDate]).orderBy('date')
   }
 
   insertIncome(payload) {

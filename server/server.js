@@ -12,13 +12,13 @@ router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
 router.get('/api/monthExpenses', (req, res) => {
-  mysqlDB.selectMonthExpenses().then((response) => {
+  mysqlDB.selectMonthExpenses(req.query.startDate, req.query.endDate).then((response) => {
     res.json({results: response})
   })
 })
 
 router.get('/api/monthIncomes', (req, res) => {
-  mysqlDB.selectMonthIncomes().then((response) => {
+  mysqlDB.selectMonthIncomes(req.query.startDate, req.query.endDate).then((response) => {
     res.json({results: response})
   })
 })

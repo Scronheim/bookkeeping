@@ -72,7 +72,9 @@ export default new Vuex.Store({
       {id: 3, title: 'Долг'},
     ],
     expenses: [],
-    incomes: []
+    monthExpenses: [],
+    incomes: [],
+    monthIncomes: []
   },
   mutations: {
     setExpenses(state, payload) {
@@ -83,13 +85,13 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    getExpenses(context) {
-      axios.get(`${API_URL}/monthExpenses`).then((response) => {
+    getExpenses(context, payload) {
+      axios.get(`${API_URL}/monthExpenses?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
         context.commit('setExpenses', response.data.results)
       })
     },
-    getIncomes(context) {
-      axios.get(`${API_URL}/monthIncomes`).then((response) => {
+    getIncomes(context, payload) {
+      axios.get(`${API_URL}/monthIncomes?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
         context.commit('setIncomes', response.data.results)
       })
     },

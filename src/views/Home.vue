@@ -1,6 +1,38 @@
 <template>
   <v-container>
     <v-row>
+      <v-col cols="2">
+        <v-menu
+            ref="monthMenu"
+            v-model="monthExpenseMenu"
+            :close-on-content-click="true"
+            transition="scale-transition"
+            offset-y
+            max-width="290px"
+            min-width="auto"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+                v-model="monthExpense"
+                label="Выбери месяц"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+              locale="ru"
+              v-model="monthExpense"
+              type="month"
+              no-title
+              scrollable
+              @input="changeDate"
+          />
+        </v-menu>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col style="padding-top: 30px" :cols="$vuetify.breakpoint.mobile ? '12': '6'">
         <v-card>
           <v-tooltip top>
@@ -11,7 +43,7 @@
             </template>
             <span>Добавить расход</span>
           </v-tooltip>
-          <v-card-title>Расходы в этом месяце</v-card-title>
+          <v-card-title>Расходы за {{ monthExpense | textDate }}</v-card-title>
           <v-card-text>
             <v-row>
               <v-col>
@@ -39,7 +71,7 @@
             </template>
             <span>Добавить доход</span>
           </v-tooltip>
-          <v-card-title>Доходы в этом месяце</v-card-title>
+          <v-card-title>Доходы за {{ monthExpense | textDate }}</v-card-title>
           <v-card-text>
             <v-row>
               <v-col>
@@ -55,42 +87,6 @@
             </v-row>
           </v-card-text>
         </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="6">
-        <v-menu
-            ref="monthMenu"
-            v-model="monthExpenseMenu"
-            close-on-content-click="true"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-                v-model="monthExpense"
-                label="Выбери месяц"
-                prepend-icon="mdi-calendar"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-              locale="ru"
-              v-model="monthExpense"
-              type="month"
-              no-title
-              scrollable
-          />
-        </v-menu>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-
       </v-col>
     </v-row>
 
@@ -254,6 +250,14 @@ export default {
     }
   }),
   methods: {
+    changeDate() {
+      let payload = {
+        startDate: this.$moment(this.monthExpense, 'YYYY-MM').startOf('month').format('YYYY-MM-DD'),
+        endDate: this.$moment(this.monthExpense, 'YYYY-MM').endOf('month').format('YYYY-MM-DD')
+      }
+      this.$store.dispatch('getExpenses', payload)
+      this.$store.dispatch('getIncomes', payload)
+    },
     selectCategory(cat) {
       this.$store.dispatch('clearActiveCategories').then(() => {
         cat.active = !cat.active

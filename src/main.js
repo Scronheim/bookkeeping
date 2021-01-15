@@ -8,9 +8,16 @@ import moment from 'moment'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css';
 
+moment.locale('ru')
+
 Vue.config.productionTip = false
 Vue.prototype.$_ = _
 Vue.prototype.$moment = moment
+
+Vue.filter('textDate', ((value) => {
+  if (!value) return ''
+  return moment(value, 'YYYY-MM').format('MMMM YYYY')
+}))
 
 Vue.use(Toast, {
   transition: "Vue-Toastification__bounce",
