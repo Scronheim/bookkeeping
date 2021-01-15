@@ -8,64 +8,7 @@ const API_URL = 'http://localhost:3000/api'
 
 export default new Vuex.Store({
   state: {
-    categories: [
-      {
-        id: 1,
-        icon: 'mdi-food',
-        items: [
-          {id: 10, title: 'Необходимая', active: false},
-          {id: 11, title: 'Вкусняхи', active: false}
-        ],
-        title: 'Еда',
-      },
-      {
-        id: 2,
-        icon: 'mdi-party-popper',
-        items: [
-          {id: 20, title: 'Запланированные', active: false},
-          {id: 21, title: 'Не запланированные', active: false},
-        ],
-        title: 'Развлечения',
-      },
-      {
-        id: 3,
-        icon: 'mdi-credit-card-outline',
-        items: [
-          {id: 30, title: 'Кредиты', active: false},
-          {id: 31, title: 'Ипотека', active: false},
-          {id: 32, title: 'Квартира', active: false},
-          {id: 33, title: 'Интернет/тв', active: false},
-        ],
-        title: 'Платежи',
-      },
-      {
-        id: 4,
-        icon: 'mdi-hanger',
-        items: [
-          {id: 40, title: 'Необходимая', active: false},
-          {id: 41, title: 'По приколу :)', active: false}
-        ],
-        title: 'Одежда',
-      },
-      {
-        id: 5,
-        icon: 'mdi-taxi',
-        items: [
-          {id: 50, title: 'Такси', active: false},
-          {id: 51, title: 'Поездки за город', active: false},
-          {id: 52, title: 'Путешествия', active: false}],
-        title: 'Дорога',
-      },
-      {
-        id: 6,
-        icon: 'mdi-cash',
-        items: [
-          {id: 60, title: 'Друзьям', active: false},
-          {id: 61, title: 'Коллегам', active: false},
-          {id: 62, title: 'Родителям', active: false}],
-        title: 'Займ',
-      }
-    ],
+    categories: [],
     incomeSources: [
       {id: 1, title: 'Зарплата'},
       {id: 2, title: 'Премия'},
@@ -83,8 +26,23 @@ export default new Vuex.Store({
     setIncomes(state, payload) {
       state.incomes = payload
     },
+    addCategory(state, payload) {
+      state.categories.push(payload)
+    },
+    setCategories(state, payload) {
+      state.categories = payload
+    }
   },
   actions: {
+    getSettings(context) {
+      axios.get(`${API_URL}/settings`).then((response) => {
+        let categories = response.data.results.find((x) => {
+          return x.title === 'categories'
+        }).value
+
+        context.commit('setCategories', JSON.parse(categories))
+      })
+    },
     getExpenses(context, payload) {
       return axios.get(`${API_URL}/monthExpenses?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
         context.commit('setExpenses', response.data.results)

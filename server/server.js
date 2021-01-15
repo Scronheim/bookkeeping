@@ -11,6 +11,13 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 
+router.route('/api/settings')
+  .get((req, res) => {
+    mysqlDB.selectSettings().then((response) => {
+      res.json({results: response})
+    })
+  })
+
 router.get('/api/monthExpenses', (req, res) => {
   mysqlDB.selectMonthExpenses(req.query.startDate, req.query.endDate).then((response) => {
     res.json({results: response})

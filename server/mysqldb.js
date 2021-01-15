@@ -1,6 +1,7 @@
 "use strict"
 const EXPENSES_TABLE = 'expenses'
 const INCOMES_TABLE = 'incomes'
+const SETTINGS_TABLE = 'settings'
 const moment = require('moment')
 
 class DB {
@@ -23,6 +24,10 @@ class DB {
         dateStrings: 'date'
       },
     });
+  }
+
+  selectSettings() {
+    return this.db.select().from(SETTINGS_TABLE)
   }
 
   selectExpenses() {

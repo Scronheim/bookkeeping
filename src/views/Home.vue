@@ -1,11 +1,6 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="2">
-
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col style="padding-top: 30px" :cols="$vuetify.breakpoint.mobile ? '12': '6'">
         <v-card>
           <v-tooltip top>
@@ -39,7 +34,7 @@
               />
             </v-menu>
             <v-spacer/>
-            Остаток на текущий момент: <span :class="monthIncomesSum-monthExpensesSum < 0 ? 'red--text': 'green--text'">{{ monthIncomesSum-monthExpensesSum }}</span>р.
+            <v-btn link to="/categories">Редактор категорий</v-btn>
           </v-card-title>
           <v-card-text>
             <v-row>
@@ -68,6 +63,9 @@
                     <tr>
                       <td>Итого:</td>
                       <td><span class="red--text">{{ monthExpensesSum }}</span>р.</td>
+                      <td>
+                        Остаток: <span :class="monthIncomesSum-monthExpensesSum < 0 ? 'red--text': 'green--text'">{{ monthIncomesSum-monthExpensesSum }}</span>р.
+                      </td>
                     </tr>
                     </tbody>
                   </template>
@@ -101,7 +99,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(item, index) in $store.getters.incomes.slice(0, 10)" :key="index" :title="item.comment">
+                    <tr v-for="(item, index) in $store.getters.incomes.slice(0, 10)" :key="index" :title="`${item.comment} (${item.date})`">
                       <td>
                         <v-icon color="success">mdi-plus</v-icon>
                         {{ humanIncomeSource(item.source) }}
