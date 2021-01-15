@@ -43,19 +43,32 @@
             </template>
             <span>Добавить расход</span>
           </v-tooltip>
-          <v-card-title>Расходы за {{ monthExpense | textDate }}</v-card-title>
+          <v-card-title>Расходы за {{ monthExpense | textDate }}<v-spacer/>
+            Остаток на текущий момент: <span :class="monthIncomesSum-monthExpensesSum < 0 ? 'red--text': 'green--text'">{{ monthIncomesSum-monthExpensesSum }}</span>р.
+          </v-card-title>
           <v-card-text>
             <v-row>
               <v-col>
-                <ul>
-                  <li v-for="(item, index) in $store.getters.expenses.slice(0, 10)" :key="index" :title="item.comment">
-                    {{ humanCategory(item.category) }}: <span class="red--text">{{ item.sum }}</span>р.
-                  </li>
-                </ul>
-              </v-col>
-              <v-col>
-                Всего расходов за месяц: <span class="red--text">{{ monthExpensesSum }}</span>р.<br/>
-                Остаток на текущий момент: <span :class="monthIncomesSum-monthExpensesSum < 0 ? 'red--text': 'green--text'">{{ monthIncomesSum-monthExpensesSum }}</span>р.
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                    <tr>
+                      <th class="text-left">Категория</th>
+                      <th class="text-left">Сумма</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item, index) in $store.getters.expenses.slice(0, 10)" :key="index" :title="item.comment">
+                      <td>{{ humanCategory(item.category) }}</td>
+                      <td>{{ item.sum }}р.</td>
+                    </tr>
+                    <tr>
+                      <td>Итого:</td>
+                      <td><span class="red--text">{{ monthExpensesSum }}</span>р.</td>
+                    </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
               </v-col>
             </v-row>
           </v-card-text>
@@ -75,14 +88,26 @@
           <v-card-text>
             <v-row>
               <v-col>
-                <ul>
-                  <li v-for="(item, index) in $store.getters.incomes.slice(0, 10)" :key="index" :title="item.comment">
-                    {{ humanIncomeSource(item.source) }}: <span class="green--text">{{ item.sum }}</span>р.
-                  </li>
-                </ul>
-              </v-col>
-              <v-col>
-                Всего доходов за месяц: <span class="green--text">{{ monthIncomesSum }}</span>р.
+                <v-simple-table>
+                  <template v-slot:default>
+                    <thead>
+                    <tr>
+                      <th class="text-left">Категория</th>
+                      <th class="text-left">Сумма</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item, index) in $store.getters.incomes.slice(0, 10)" :key="index" :title="item.comment">
+                      <td>{{ humanIncomeSource(item.source) }}</td>
+                      <td>{{ item.sum }}р.</td>
+                    </tr>
+                    <tr>
+                      <td>Итого:</td>
+                      <td><span class="green--text">{{ monthIncomesSum }}</span>р.</td>
+                    </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
               </v-col>
             </v-row>
           </v-card-text>
