@@ -17,6 +17,11 @@ router.route('/api/settings')
       res.json({results: response})
     })
   })
+  .patch((req, res) => {
+    mysqlDB.updateCategories(req.body).then((response) => {
+      res.json({results: response})
+    })
+  })
 
 router.get('/api/monthExpenses', (req, res) => {
   mysqlDB.selectMonthExpenses(req.query.startDate, req.query.endDate).then((response) => {

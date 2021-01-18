@@ -30,6 +30,10 @@ class DB {
     return this.db.select().from(SETTINGS_TABLE)
   }
 
+  updateCategories(payload) {
+    return this.db(SETTINGS_TABLE).where('id', '=', 1).update(payload)
+  }
+
   selectExpenses() {
     return this.db.select().from(EXPENSES_TABLE).orderBy('id')
   }

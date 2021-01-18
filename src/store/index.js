@@ -29,6 +29,9 @@ export default new Vuex.Store({
     addCategory(state, payload) {
       state.categories.push(payload)
     },
+    addSubCategory(state, payload) {
+      state.categories[payload.index].items.push(payload.item)
+    },
     setCategories(state, payload) {
       state.categories = payload
     }
@@ -42,6 +45,9 @@ export default new Vuex.Store({
 
         context.commit('setCategories', JSON.parse(categories))
       })
+    },
+    saveCategories(context) {
+      return axios.patch(`${API_URL}/settings`, {value: JSON.stringify(context.state.categories)})
     },
     getExpenses(context, payload) {
       return axios.get(`${API_URL}/monthExpenses?startDate=${payload.startDate}&endDate=${payload.endDate}`).then((response) => {
@@ -59,6 +65,16 @@ export default new Vuex.Store({
           child.active = false
         })
       })
+    },
+    findSubCategoryId(context, id) {
+      let result
+      context.state.categories.forEach((cat) => {
+        let temp = cat.items.find((sCat) => {
+          return sCat.id === id
+        })
+        if (temp) result = true
+      })
+      return result
     },
     async addExpense(context, payload) {
       return axios.post(`${API_URL}/expenses`, payload)

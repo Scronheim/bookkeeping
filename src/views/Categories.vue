@@ -18,34 +18,46 @@
         </v-list>
       </v-col>
       <v-col>
-        <v-menu
-            v-model="categoryMenu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn v-on="on" v-bind="attrs">Добавить категорию</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>Категория</v-card-title>
-            <v-card-text>
-              <v-row>
-                <v-col>
-                  <v-text-field label="Название" v-model="categoryTitle"/>
-                </v-col>
-                <v-col>
-                  <v-text-field label="Иконка" v-model="categoryIcon"/>
-                </v-col>
-              </v-row>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="success" @click="addCategory">Добавить</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-menu>
+        <v-card>
+          <v-card-title>Категория</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <v-text-field label="Название" v-model="categoryTitle"/>
+              </v-col>
+              <v-col>
+                <v-text-field label="Иконка" placeholder="mdi-xxx" v-model="categoryIcon"/>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="success" @click="addCategory">Добавить</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      <v-col>
+        <v-card>
+          <v-card-title>Подкатегория</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col>
+                <v-select label="Категория" :items="$store.getters.categories" item-value="id" item-text="title"
+                          v-model="selectedCategory"/>
+              </v-col>
+              <v-col>
+                <v-text-field label="Название" v-model="subCategoryTitle"/>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="success" @click="addSubCategory">Добавить</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col align="center">
+        <v-btn color="success" @click="saveCategories">Сохранить в базу</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -55,9 +67,11 @@
 export default {
   name: 'Categories',
   data: () => ({
-    categoryMenu: false,
     categoryTitle: undefined,
-    categoryIcon: undefined
+    subCategoryTitle: undefined,
+    categoryIcon: undefined,
+    subCategoryIcon: undefined,
+    selectedCategory: undefined
   }),
   methods: {
     addCategory() {
@@ -68,7 +82,39 @@ export default {
         items: []
       }
       this.$store.commit('addCategory', payload)
-      this.categoryMenu = false
+      this.$toast.success(`Категория ${this.categoryTitle} успешно добавлена`)
+    },
+    addSubCategory() {
+      let index = this.$store.getters.categories.findIndex((x) => {
+        return x.id === this.selectedCategory
+      })
+      let id = this.getRandomCategoryId()
+      this.$store.dispatch('findSubCategoryId', id).then((response) => {
+        if (response) {
+          this.$toast.error(`Какой ты неудачливый. Попался рандомный ID (${id}) который уже существует`)
+        } else {
+          let payload = {
+            index: index,
+            item: {
+              active: false,
+              id: id,
+              title: this.subCategoryTitle
+            }
+          }
+          this.$store.commit('addSubCategory', payload)
+          this.$toast.success(`Подкатегория ${this.subCategoryTitle} успешно добавлена`)
+        }
+      })
+    },
+    getRandomCategoryId() {
+      return Math.floor(Math.random() * (1000 - 100)) + 100
+    },
+    saveCategories() {
+      this.$store.dispatch('saveCategories').then((response) => {
+        if (response.data.results === 1) {
+          this.$toast.success('Категории успешно сохранены')
+        }
+      })
     }
   }
 }
